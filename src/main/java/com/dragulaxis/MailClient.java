@@ -63,6 +63,7 @@ public class MailClient {
                             InputStream inputStream = content.getInputStream();
                             byte[] buffer = new byte[4096];
                             int byteRead;
+                            System.out.println("Скачивается...");
                             while ((byteRead = inputStream.read(buffer)) != -1) {
                                 outputStream.write(buffer, 0, byteRead);
                             }
