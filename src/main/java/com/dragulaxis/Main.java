@@ -11,6 +11,8 @@ public class Main {
         // параметры поставщика (.csv form OOO "Запчасти даром")
 
         // скачивание файла...
+//        MailClient.download("Hello World");
+
         // загрузка файла в БД...
         // готово
     }
