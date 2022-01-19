@@ -1,12 +1,29 @@
 package com.dragulaxis;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVRecord;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.sql.*;
 
 public class Repository {
     private static final String PATH_TO_DB = "src\\main\\resources\\db\\sqliteDB.db";
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws IOException {
 
+        Reader in = new FileReader("file:///C:/files-from-email/file10340224668235556898.tmp");
+        Iterable<CSVRecord> records = CSVFormat.EXCEL.parse(in);
+        for (CSVRecord record : records) {
+            String nom = record.get("Номенклатура");
+            String dis = record.get("Описание");
+            System.out.println(nom);
+            System.out.println(dis);
+            System.out.println();
+        }
+
+        // TODO: создать таблицу по ТЗ
         String sqlCreateTable = "CREATE TABLE IF NOT EXISTS test_table (\n"
                 + "	id integer PRIMARY KEY,\n"
                 + "	name text NOT NULL,\n"
@@ -18,10 +35,10 @@ public class Repository {
 
         String sqlSelectData = "SELECT * FROM test_table;";
 
-        Repository repository = new Repository();
+//        Repository repository = new Repository();
 //        repository.createDb(PATH_TO_DB);
 //        repository.insertInto(sqlPutData);
-        repository.selectFromTable(sqlSelectData);
+//        repository.selectFromTable(sqlSelectData);
 
     }
 
