@@ -1,6 +1,6 @@
 package com.dragulaxis;
 
-public class Main {
+public class Controller {
     public static void main(String[] args) {
         // я бы тут просто последовательно написал команды
         // для работы конкретно этого приложения
