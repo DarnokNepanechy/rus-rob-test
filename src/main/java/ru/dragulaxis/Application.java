@@ -1,16 +1,7 @@
 package ru.dragulaxis;
 
-import com.opencsv.CSVParser;
-import com.opencsv.CSVParserBuilder;
-import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
-import com.opencsv.exceptions.CsvValidationException;
-
 import java.io.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class Application {
     static int column1 = 1;
@@ -26,71 +17,42 @@ public class Application {
 
     static String from = "Hello World";
 
-    public static void main(String[] args) throws IOException, SQLException {
+    public static void main(String[] args) {
 
         String choice = "";
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        while (!choice.equals("4")){
-            info();
-            choice = br.readLine();
-            switch (choice) {
-                case ("1") -> tableSetting(br);
-                case ("2") -> mailSetting(br);
-                case ("3") -> {
-                    System.out.print("Присылатель: ");
-                    from = br.readLine();
-                }
-                case ("4") -> br.close();
-                case ("5") -> {
-                    br.close();
-                    return;
+        try {
+            while (!choice.equals("4")){
+                info();
+                choice = br.readLine();
+                switch (choice) {
+                    case ("1") -> tableSetting(br);
+                    case ("2") -> mailSetting(br);
+                    case ("3") -> {
+                        System.out.print("Присылатель: ");
+                        from = br.readLine();
+                    }
+                    case ("4") -> br.close();
+                    case ("5") -> {
+                        br.close();
+                        return;
+                    }
                 }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         MailClient client = new MailClient(mailHost, mailPort, mailLogin, mailPassword);
         String filePath = client.downloadCsvFile(from);
 
-        assert filePath != null;
-        File file = new File(filePath);
-
-        CSVParser parser = new CSVParserBuilder()
-                .withSeparator(';')
-                .build();
-
-        CSVReader reader = new CSVReaderBuilder(new FileReader(file))
-                .withSkipLines(1)
-                .withCSVParser(parser)
-                .build();
-
-        String PATH_TO_DB = "src\\main\\resources\\db\\sqliteDB.db";
         Repository repository = new Repository(column1, column2, column5, column6, column7);
-        repository.createTable();
-
-        Connection connection = DriverManager.getConnection("jdbc:sqlite:" + PATH_TO_DB);
-        connection.setAutoCommit(false);
-        Statement statement = connection.createStatement();
-
-        int i = 1;
         try {
-            String[] nextLine;
-            statement.execute("DELETE FROM PriceItems;");
-            System.out.println("Загрузка данных в базу...");
-            while ((nextLine = reader.readNext()) != null) {
-                statement.execute(repository.createSQLRequest(nextLine));
-                i++;
-            }
-        } catch (CsvValidationException e) {
-            System.out.println("Не удалось обработать строку: " + i);
+            repository.putToDb("sqliteDB.db", filePath);
+        } catch (FileNotFoundException | SQLException e) {
             e.printStackTrace();
-        } finally {
-            connection.commit();
-            connection.close();
-            statement.close();
-            System.out.println("Добавлено " + (i - 1) + " полей");
         }
-        connection.commit();
     }
 
     static void info() {
@@ -106,12 +68,12 @@ public class Application {
         System.out.println("Порт: " + mailPort);
         System.out.println("Логин: " + mailLogin);
         System.out.println();
-        System.out.println("Присылает почту: " + from);
+        System.out.println("Поставщик: " + from);
         System.out.println();
         System.out.println("Введите соответствующую цифру для команды:");
-        System.out.println("1. Настройка прайс-листа поставщика. ");
-        System.out.println("2. Настройка почты. ");
-        System.out.println("3. Сменить присылателя. ");
+        System.out.println("1. Поменять номера колонок прайс-листа поставщика. ");
+        System.out.println("2. Поменять настройку почты. ");
+        System.out.println("3. Сменить поставщика. ");
         System.out.println("4. Начать выполнение с текущими настройками! ");
         System.out.println("5. Выйти из программы. ");
         System.out.println();
@@ -142,7 +104,7 @@ public class Application {
         mailPort = Integer.parseInt(br.readLine());
         System.out.print("Логин: ");
         mailLogin = br.readLine();
-        System.out.print("Пароль: ");
+        System.out.print("Пароль (обычно используются пароли приложений): ");
         mailPassword = br.readLine();
         System.out.println();
     }
