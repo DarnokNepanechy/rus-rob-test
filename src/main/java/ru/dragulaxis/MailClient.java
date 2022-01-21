@@ -8,18 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-class MailClient {
-    private final String mailHost;
-    private final int mailPort;
-    private final String mailLogin;
-    private final String mailPassword;
-
-    MailClient(String mailHost, int mailPort, String mailLogin, String mailPassword) {
-        this.mailHost = mailHost;
-        this.mailPort = mailPort;
-        this.mailLogin = mailLogin;
-        this.mailPassword = mailPassword;
-    }
+record MailClient(String mailHost, int mailPort, String mailLogin, String mailPassword) {
 
     String downloadCsvFile(String from) {
 
@@ -47,7 +36,7 @@ class MailClient {
 
             // рассматривем самые последние сообщения, присланные от поставщика
             // потому что в них, предположительно, актуальный прайс-лист
-            for (int i = messages.length - 1; i >= 0 ; i--) {
+            for (int i = messages.length - 1; i >= 0; i--) {
 
                 // смотрим первый адрес, убираем <почта>, пробел в конце и сравниваем с тем, что указано в параметрах
                 String addressLine = messages[i].getFrom()[0].toString();

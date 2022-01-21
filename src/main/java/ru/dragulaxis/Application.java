@@ -52,6 +52,7 @@ public class Application {
         MailClient client = new MailClient(mailHost, mailPort, mailLogin, mailPassword);
         String filePath = client.downloadCsvFile(from);
 
+        assert filePath != null;
         File file = new File(filePath);
 
         CSVParser parser = new CSVParserBuilder()
@@ -102,7 +103,7 @@ public class Application {
         System.out.println();
         System.out.println("Текущие настройки почты:");
         System.out.println("Хост: " + mailHost);
-        System.out.println("Порт: " + mailPort);;
+        System.out.println("Порт: " + mailPort);
         System.out.println("Логин: " + mailLogin);
         System.out.println();
         System.out.println("Присылает почту: " + from);
