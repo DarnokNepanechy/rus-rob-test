@@ -8,7 +8,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-record MailClient(String mailHost, int mailPort, String mailLogin, String mailPassword) {
+class MailClient {
+
+    String mailHost;
+    int mailPort;
+    String mailLogin;
+    String mailPassword;
+
+    public MailClient(String mailHost, int mailPort, String mailLogin, String mailPassword) {
+        this.mailHost = mailHost;
+        this.mailPort = mailPort;
+        this.mailLogin = mailLogin;
+        this.mailPassword = mailPassword;
+    }
 
     String downloadCsvFile(String from) {
 
@@ -73,6 +85,7 @@ record MailClient(String mailHost, int mailPort, String mailLogin, String mailPa
 
         } catch (MessagingException | IOException e) {
             e.printStackTrace();
+
         }
 
         return null;
