@@ -35,7 +35,11 @@ class DBClient {
         String searchNumber = fields[column2].replaceAll("[^A-Za-z0-9]", "").toUpperCase(Locale.ROOT);
         String description = fields[column5].length() > 512 ? fields[column5].substring(0, 512) : fields[column5];
         Double price = Double.parseDouble(fields[column6].replace(",", "."));
-        int count = Integer.parseInt(fields[column7].replaceAll("[^0-9]", ""));
+        String stringCount = fields[column7];
+        if (stringCount.contains("-")) {
+            stringCount = stringCount.substring(stringCount.indexOf('-')).replaceAll("[^0-9]", "");
+        }
+        int count = Integer.parseInt(stringCount);
 
         return String.format(
                 "INSERT INTO PriceItems " +
