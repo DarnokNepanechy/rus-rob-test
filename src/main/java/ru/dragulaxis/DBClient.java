@@ -37,9 +37,9 @@ class DBClient {
         Double price = Double.parseDouble(fields[column6].replace(",", "."));
         String stringCount = fields[column7];
         if (stringCount.contains("-")) {
-            stringCount = stringCount.substring(stringCount.indexOf('-')).replaceAll("[^0-9]", "");
+            stringCount = stringCount.substring(stringCount.indexOf('-'));
         }
-        int count = Integer.parseInt(stringCount);
+        int count = Integer.parseInt(stringCount.replaceAll("[^0-9]", ""));
 
         return String.format(
                 "INSERT INTO PriceItems " +

@@ -14,6 +14,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Scanner;
 
 import static ru.dragulaxis.DBClient.createTableSQL;
 
@@ -47,9 +48,14 @@ public class CSVHandler {
         } catch (CsvValidationException | IOException e) {
             e.printStackTrace();
             System.out.println("Остались непрочитанные данные. Не удалось обработать строку: " + i);
+            System.out.println("Сохранить добавленные данные: " + (i - 1) + " запись (Y / N)?");
+            Scanner scanner = new Scanner(System.in);
+            String answer = scanner.nextLine();
+            if (answer.toLowerCase().equals("y")) {
+                connection.commit();
+                System.out.println("Добавлено " + (i - 1) + " полей");
+            }
         } finally {
-            connection.commit();
-            System.out.println("Добавлено " + (i - 1) + " полей");
             connection.close();
             statement.close();
         }

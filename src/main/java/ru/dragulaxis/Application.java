@@ -46,8 +46,10 @@ public class Application {
             e.printStackTrace();
         }
 
-        MailClient client = new MailClient(mailHost, mailPort, mailLogin, mailPassword);
-        String filePath = client.downloadCsvFile(from);
+//        MailClient client = new MailClient(mailHost, mailPort, mailLogin, mailPassword);
+//        String filePath = client.downloadCsvFile(from);
+
+        String filePath = "C:\\temporary\\file7883407065055785702.csv";
 
         DBClient dbClient = new DBClient(column1, column2, column5, column6, column7);
         try {
